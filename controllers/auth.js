@@ -19,7 +19,7 @@ exports.signin = (req, res) => {
     User.findOne({ email }, (err, user) => {
         if (err || !user) {
             return res.status(401).json({
-                error: "User with that email does not exist. Please signin."
+                error: "User with that email does not exist. Please signup."
             });
         }
         if (!user.authenticate(password)) {
