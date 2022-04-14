@@ -19,13 +19,6 @@ class Login extends Component {
         this.setState({ [name]: event.target.value });
     };
 
-    authenticate(jwt, next) {
-        if (typeof window !== "undefined") {
-            localStorage.setItem("jwt", JSON.stringify(jwt));
-            next();
-        }
-    }
-
     clickSubmit = event => {
         event.preventDefault();
         this.setState({ loading: true })
