@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { isAuthenticated }  from "../auth/index";
 import { Link, Redirect } from "react-router-dom";
 import { read } from"./apiUser";
+import DefaultProfile from "../images/avatar.jpg";
+import DelUser from "./DelUser";
+
 
 class Profile extends Component {
     constructor() {
@@ -28,35 +31,47 @@ class Profile extends Component {
         this.init(userId);
     }
 
+    componentWillReceiveProps(props) {
+        const userId = props.match.params.userId;
+        this.init(userId);
+    }
+
     render() {
         const { redirection, user } = this.state;
         if (redirection) return <Redirect to="/login" />;
 
         return (
             <div className="container">
-                <div className="row">
-                    <div className="col-md-6">
-                        <h2 className="mt-5 mb-5">Profile</h2>
-                        <p>Welcome {isAuthenticated().user.name}</p>
-                        <p>Email: {isAuthenticated().user.email}</p>
-                        <p>{`Member Since: ${new Date(this.state.user.created).toDateString()}`}</p>
-                    </div>
+                <h2 className="mt-5 mb-5">Profile</h2>
+                    <div className="row">
+                        <div className="col-md-6">
+                            <img className="card-img-top" src={DefaultProfile} alt={user.name}
+                            style={{ width: "100%", height: "15vw", objectFit: "cover" }} />
+                        </div>
 
-                    <div className="col-md-6">
-                        {isAuthenticated().user && isAuthenticated().user._id == user._id && (
-                            <div className="d-inline-block mt-5">
-                                <Link
-                                    className="btn btn-raised btn-success mr-5"
-                                    to={`/user/edit/${user._id}`}
-                                > Edit Profile </Link>
-                                <button className="btn btn-raised btn-danger"> Delete Profile </button>
+                        <div className="col-md-6">
+                            <div className="lead mt-2">
+                                <p>Welcome {user.name}</p>
+                                <p>Email: {user.email}</p>
+                                <p>{`Member Since: ${new Date(user.created).toDateString()}`}</p>
                             </div>
-                        )}
+
+                            {isAuthenticated().user && isAuthenticated().user._id === user._id && (
+                                <div className="d-inline-block">
+                                    <Link
+                                        className="btn btn-raised btn-success mr-5"
+                                        to={`/user/edit/${user._id}`}
+                                    > Edit Profile </Link>
+                                    <DelUser userId={user._id} />
+                                    
+                                </div>
+                            )}
+                        </div>
                     </div>
-                </div>
-            </div>
-        );
-    }
+                
+                 </div>
+            );
+        }
 }
 
 export default Profile;
