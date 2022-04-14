@@ -14,12 +14,12 @@ exports.signup = async (req, res) => {
     res.status(200).json({ message: "Account created successfully! Please login to continue." });
 };
 
-exports.signin = (req, res) => {
+exports.login = (req, res) => {
     const { email, password } = req.body;
     User.findOne({ email }, (err, user) => {
         if (err || !user) {
             return res.status(401).json({
-                error: "User with that email does not exist. Please signin."
+                error: "User with that email does not exist. Please signup."
             });
         }
         if (!user.authenticate(password)) {
@@ -34,12 +34,12 @@ exports.signin = (req, res) => {
     });
 };
 
-exports.signout = (req, res) => {
+exports.logout = (req, res) => {
     res.clearCookie("t");
-    return res.json({ message: "Signout success!"});
+    return res.json({ message: "Logout successful!"});
 };
 
-exports.requireSignin = expressJwt({
+exports.requireLogin = expressJwt({
     secret: process.env.JWT_SECRET,
     userProperty: "auth"
 
